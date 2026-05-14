@@ -8,10 +8,12 @@ import {
 } from 'react-native';
 
 const SERVICES = [
-  { id: 1, title: 'Consultas', desc: 'Agende consultas veterinarias para o seu pet', screen: null },
-  { id: 2, title: 'Medicamentos', desc: 'Acompanhamento e prescricao de tratamentos', screen: null },
-  { id: 3, title: 'Banho e Tosa', desc: 'Cuidados esteticos com profissionais', screen: null },
-  { id: 4, title: 'Marketplace', desc: 'Produtos selecionados para o seu pet', screen: 'Marketplace' },
+  { id: 1, title: 'Consultas', desc: 'Agende consultas veterinárias', icon: 'medkit-outline', screen: null },
+  { id: 2, title: 'Medicamentos', desc: 'Prescrição de tratamentos', icon: 'flask-outline', screen: null },
+  { id: 3, title: 'Banho e Tosa', desc: 'Cuidados estéticos profissionais', icon: 'cut-outline', screen: null },
+  { id: 4, title: 'Marketplace', desc: 'Produtos para o seu pet', icon: 'storefront-outline', screen: 'Marketplace' },
+  { id: 5, title: 'Meu Pet', desc: 'Informações do seu animal', icon: 'paw-outline', screen: 'MeuPet' },
+  { id: 6, title: 'Planos', desc: 'Planos de saúde pet', icon: 'shield-checkmark-outline', screen: 'Planos' },
 ];
 
 const TIPS = [

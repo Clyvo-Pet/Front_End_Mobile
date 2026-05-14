@@ -44,11 +44,9 @@ export default function RegisterScreen({ navigate, setUser }) {
 
       await AsyncStorage.setItem('@clyvo_user', JSON.stringify(user));
 
-      Alert.alert(
-        'Conta criada',
-        'Seu cadastro foi realizado com sucesso. Faca login para continuar.',
-        [{ text: 'Fazer login', onPress: () => navigate('Login') }]
-      );
+      // Loga o usuário direto e navega para Home
+      setUser(user);
+      navigate('Home');
     } catch (e) {
       Alert.alert('Erro', 'Nao foi possivel salvar o cadastro. Tente novamente.');
     }
@@ -102,7 +100,7 @@ export default function RegisterScreen({ navigate, setUser }) {
             onPress={handleRegister}
             activeOpacity={0.8}
           >
-            <Text style={styles.buttonText}>Criar conta</Text>
+            <Text style={styles.buttonText}>Continuar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

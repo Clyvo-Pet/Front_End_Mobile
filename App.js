@@ -49,13 +49,13 @@ export default function App() {
   const clearCart = () => setCart([]);
 
   const logout = async () => {
-    await AsyncStorage.removeItem('@clyvo_user');
+    // Apenas limpa a sessão, NÃO remove o cadastro do usuário
     setUser(null);
     setCart([]);
     navigate('Login');
   };
 
-  const props = { navigate, user, setUser, cart, addToCart, updateCartQty, clearCart, logout };
+  const props = { navigate, user, setUser, cart, setCart, addToCart, updateCartQty, clearCart, logout };
 
   const renderScreen = () => {
     switch (screen) {
