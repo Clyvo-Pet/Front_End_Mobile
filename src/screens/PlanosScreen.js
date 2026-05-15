@@ -76,8 +76,24 @@ const PLANS = [
   },
 ];
 
+const FAQ = [
+  {
+    q: 'Posso cancelar a qualquer momento?',
+    a: 'Sim, você pode cancelar seu plano a qualquer momento sem taxas de cancelamento. O acesso permanece ativo até o fim do período pago.',
+  },
+  {
+    q: 'O plano cobre mais de um pet?',
+    a: 'Cada plano é válido para um pet. Para mais de um animal, você pode contratar planos adicionais com 15% de desconto.',
+  },
+  {
+    q: 'Como funciona a cobertura de emergência?',
+    a: 'Nossa rede de clínicas parceiras atende emergências 24h. Basta apresentar seu número de assinante na recepção.',
+  },
+];
+
 export default function PlanosScreen({ navigate, user }) {
   const [currentPlan] = useState(null);
+  const [openFaq, setOpenFaq] = useState(null);
 
   const handleSubscribe = (plan) => {
     Alert.alert(
@@ -178,6 +194,36 @@ export default function PlanosScreen({ navigate, user }) {
         ))}
       </View>
 
+      <View style={styles.guaranteeCard}>
+        <Text style={styles.guaranteeEmoji}>🛡️</Text>
+        <View style={{ flex: 1, marginLeft: 14 }}>
+          <Text style={styles.guaranteeTitle}>Garantia de 7 dias</Text>
+          <Text style={styles.guaranteeSub}>
+            Não ficou satisfeito? Cancelamos e devolvemos 100% do valor.
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.faqSection}>
+        <Text style={styles.faqTitle}>Dúvidas frequentes</Text>
+        {FAQ.map((item, i) => (
+          <TouchableOpacity
+            key={i}
+            style={styles.faqItem}
+            onPress={() => setOpenFaq(openFaq === i ? null : i)}
+            activeOpacity={0.7}
+          >
+            <View style={styles.faqHeader}>
+              <Text style={styles.faqQuestion}>{item.q}</Text>
+              <Text style={styles.faqChevron}>{openFaq === i ? '▲' : '▼'}</Text>
+            </View>
+            {openFaq === i && (
+              <Text style={styles.faqAnswer}>{item.a}</Text>
+            )}
+          </TouchableOpacity>
+        ))}
+      </View>
+
       <View style={{ height: 32 }} />
     </ScrollView>
   );
@@ -237,4 +283,27 @@ const styles = StyleSheet.create({
   benefitText: { fontSize: 13, lineHeight: 18, flex: 1 },
   planBtn: { borderRadius: 10, paddingVertical: 13, alignItems: 'center', marginTop: 16 },
   planBtnText: { fontSize: 14, fontWeight: '700' },
+
+  guaranteeCard: {
+    margin: 16, backgroundColor: '#fff', borderRadius: 12, padding: 16,
+    flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#eee',
+    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 3, elevation: 1,
+  },
+  guaranteeEmoji: { fontSize: 30 },
+  guaranteeTitle: { fontSize: 14, fontWeight: '700', color: '#1a1a1a', marginBottom: 4 },
+  guaranteeSub: { fontSize: 12, color: '#666', lineHeight: 17 },
+
+  faqSection: { paddingHorizontal: 16 },
+  faqTitle: { fontSize: 16, fontWeight: '700', color: '#1a1a1a', marginBottom: 12 },
+  faqItem: {
+    backgroundColor: '#fff', borderRadius: 12, padding: 16, marginBottom: 8,
+    borderWidth: 1, borderColor: '#eee',
+  },
+  faqHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  faqQuestion: { fontSize: 13, fontWeight: '600', color: '#1a1a1a', flex: 1, paddingRight: 8, lineHeight: 18 },
+  faqChevron: { fontSize: 10, color: '#999' },
+  faqAnswer: {
+    fontSize: 13, color: '#666', lineHeight: 19, marginTop: 10,
+    paddingTop: 10, borderTopWidth: 1, borderTopColor: '#f0f0f0',
+  },
 });
