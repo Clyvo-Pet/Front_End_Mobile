@@ -16,8 +16,15 @@ const DEFAULT_PET = {
   color: 'Dourado',
 };
 
+const TABS = [
+  { id: 'info',    label: 'Informações' },
+  { id: 'saude',   label: 'Saúde'       },
+  { id: 'vacinas', label: 'Vacinas'     },
+];
+
 export default function MeuPetScreen({ navigate, user }) {
-  const [pet] = useState({ ...DEFAULT_PET });
+  const [pet]       = useState({ ...DEFAULT_PET });
+  const [activeTab, setActiveTab] = useState('info');
 
   const petEmoji =
     pet.species === 'Cachorro' ? '🐶'
@@ -29,8 +36,12 @@ export default function MeuPetScreen({ navigate, user }) {
   return (
     <View style={styles.root}>
 
+      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Meu Pet</Text>
+        <TouchableOpacity style={styles.editBtn} activeOpacity={0.7}>
+          <Text style={styles.editBtnText}>Editar</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -55,6 +66,31 @@ export default function MeuPetScreen({ navigate, user }) {
               </View>
             </View>
           </View>
+        </View>
+
+        {/* Abas */}
+        <View style={styles.tabRow}>
+          {TABS.map(tab => (
+            <TouchableOpacity
+              key={tab.id}
+              style={[styles.tab, activeTab === tab.id && styles.tabActive]}
+              onPress={() => setActiveTab(tab.id)}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.tabText, activeTab === tab.id && styles.tabTextActive]}>
+                {tab.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Placeholder das seções */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            {activeTab === 'info'    ? 'Informações do pet'  : null}
+            {activeTab === 'saude'   ? 'Histórico de saúde'  : null}
+            {activeTab === 'vacinas' ? 'Carteira de vacinação' : null}
+          </Text>
         </View>
 
         <View style={{ height: 32 }} />
@@ -86,6 +122,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#1a1a1a',
+  },
+  editBtn: {
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#2e7d32',
+  },
+  editBtnText: {
+    fontSize: 13,
+    color: '#2e7d32',
+    fontWeight: '600',
   },
 
   profileCard: {
@@ -144,6 +192,43 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#2e7d32',
     fontWeight: '600',
+  },
+
+  tabRow: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+    paddingHorizontal: 16,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+  },
+  tabActive: {
+    borderBottomColor: '#2e7d32',
+  },
+  tabText: {
+    fontSize: 13,
+    color: '#999',
+    fontWeight: '500',
+  },
+  tabTextActive: {
+    color: '#2e7d32',
+    fontWeight: '700',
+  },
+
+  section: {
+    padding: 16,
+  },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#1a1a1a',
+    marginBottom: 12,
   },
 
 });
