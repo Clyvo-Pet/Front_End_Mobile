@@ -9,6 +9,8 @@ import {
   Alert,
 } from 'react-native';
 
+// ── Dados mockados ────────────────────────────────────────
+
 const DEFAULT_PET = {
   name: 'Mel',
   species: 'Cachorro',
@@ -49,6 +51,8 @@ const STATUS_BG    = { ok: '#e8f5e9', alert: '#fff3e0', expired: '#ffebee' };
 const STATUS_LABEL = { ok: 'Em dia',  alert: 'Atenção', expired: 'Vencida' };
 
 const MONTHS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+// ── Componente ────────────────────────────────────────────
 
 export default function MeuPetScreen({ navigate, user }) {
   const [pet,       setPet]       = useState({ ...DEFAULT_PET });
@@ -323,6 +327,8 @@ export default function MeuPetScreen({ navigate, user }) {
   );
 }
 
+// ── Estilos ───────────────────────────────────────────────
+
 const styles = StyleSheet.create({
 
   root: {
@@ -330,6 +336,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f7f7',
   },
 
+  // ── Header ──────────────────────────────────────────────
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -359,6 +366,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  // ── Perfil ───────────────────────────────────────────────
   profileCard: {
     backgroundColor: '#fff',
     margin: 16,
@@ -417,6 +425,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  // ── Abas ─────────────────────────────────────────────────
   tabRow: {
     flexDirection: 'row',
     backgroundColor: '#fff',
@@ -444,6 +453,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
+  // ── Seções ───────────────────────────────────────────────
   section: {
     padding: 16,
   },
@@ -454,6 +464,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
+  // ── Informações (modo leitura) ───────────────────────────
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -474,6 +485,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 
+  // ── Informações (modo edição) ────────────────────────────
   fieldLabel: {
     fontSize: 12,
     color: '#888',
@@ -550,6 +562,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
+  // ── Saúde: próximas consultas ────────────────────────────
   apptCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -603,6 +616,7 @@ const styles = StyleSheet.create({
     color: '#888',
   },
 
+  // ── Saúde: histórico ────────────────────────────────────
   historyItem: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -656,6 +670,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  // ── Vacinas ──────────────────────────────────────────────
   vaccineCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
