@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,12 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, SHADOW } from '../theme';
+
+// ── Chave de armazenamento ────────────────────────────────
+
+const STORAGE_KEY = '@clyvo_pet';
 
 // ── Dados mockados ────────────────────────────────────────
 
@@ -47,9 +52,9 @@ const VACCINES = [
   { name: 'Gripe Canina',      date: '05/06/2024', next: '05/06/2025', status: 'expired' },
 ];
 
-const STATUS_COLOR = { ok: COLORS.primary,  alert: COLORS.warning,      expired: COLORS.danger      };
-const STATUS_BG    = { ok: COLORS.primaryLight, alert: COLORS.warningLight, expired: '#ffebee'       };
-const STATUS_LABEL = { ok: 'Em dia',        alert: 'Atenção',           expired: 'Vencida'          };
+const STATUS_COLOR = { ok: COLORS.primary,     alert: COLORS.warning,      expired: COLORS.danger  };
+const STATUS_BG    = { ok: COLORS.primaryLight, alert: COLORS.warningLight, expired: '#ffebee'      };
+const STATUS_LABEL = { ok: 'Em dia',            alert: 'Atenção',           expired: 'Vencida'      };
 
 const MONTHS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
@@ -59,6 +64,7 @@ export default function MeuPetScreen({ navigate, user }) {
   const [pet,       setPet]       = useState({ ...DEFAULT_PET });
   const [draft,     setDraft]     = useState({ ...DEFAULT_PET });
   const [editing,   setEditing]   = useState(false);
+  const [loading,   setLoading]   = useState(true);
   const [activeTab, setActiveTab] = useState('info');
 
   const petEmoji =
@@ -68,15 +74,47 @@ export default function MeuPetScreen({ navigate, user }) {
     : pet.species === 'Coelho'  ? '🐰'
     : '🐾';
 
-  function handleSave() {
-    setPet({ ...draft });
-    setEditing(false);
-    Alert.alert('Salvo!', 'Dados do pet atualizados com sucesso.');
+  useEffect(() => {
+    async function loadPet() {
+      try {
+        const saved = await AsyncStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          setPet(parsed);
+          setDraft(parsed);
+        }
+      } catch (e) {
+        console.warn('Erro ao carregar dados do pet:', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPet();
+  }, []);
+
+  async function handleSave() {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+      setPet({ ...draft });
+      setEditing(false);
+      Alert.alert('Salvo!', 'Dados do pet atualizados com sucesso.');
+    } catch (e) {
+      Alert.alert('Erro', 'Não foi possível salvar os dados. Tente novamente.');
+    }
   }
 
   function handleCancel() {
     setDraft({ ...pet });
     setEditing(false);
+  }
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Carregando...</Text>
+      </View>
+    );
   }
 
   return (
@@ -335,6 +373,18 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: COLORS.background,
+  },
+
+  // ── Loading ──────────────────────────────────────────────
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.background,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: COLORS.textFaint,
   },
 
   // ── Header ──────────────────────────────────────────────
