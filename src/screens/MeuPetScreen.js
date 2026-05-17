@@ -27,18 +27,26 @@ const TABS = [
 const SPECIES_LIST = ['Cachorro', 'Gato', 'Pássaro', 'Coelho', 'Outro'];
 
 const HEALTH_HISTORY = [
-  { id: 1, date: '08/05/2025', type: 'Consulta',  desc: 'Check-up anual — Tudo ok!',                   status: 'ok'    },
-  { id: 2, date: '22/03/2025', type: 'Vacina',    desc: 'Antirrábica — dose anual aplicada',            status: 'ok'    },
-  { id: 3, date: '10/02/2025', type: 'Exame',     desc: 'Hemograma completo — resultados normais',      status: 'ok'    },
-  { id: 4, date: '05/01/2025', type: 'Consulta',  desc: 'Coceira na pele — tratamento prescrito',       status: 'alert' },
+  { id: 1, date: '08/05/2025', type: 'Consulta', desc: 'Check-up anual — Tudo ok!',              status: 'ok'    },
+  { id: 2, date: '22/03/2025', type: 'Vacina',   desc: 'Antirrábica — dose anual aplicada',      status: 'ok'    },
+  { id: 3, date: '10/02/2025', type: 'Exame',    desc: 'Hemograma completo — resultados normais', status: 'ok'    },
+  { id: 4, date: '05/01/2025', type: 'Consulta', desc: 'Coceira na pele — tratamento prescrito',  status: 'alert' },
 ];
 
 const NEXT_APPOINTMENTS = [
-  { id: 1, date: '20/06/2025', time: '14h30', type: 'Consulta',   clinic: 'Clínica VetCare'  },
-  { id: 2, date: '15/07/2025', time: '10h00', type: 'Vacina V10', clinic: 'Pet Saúde Plus'   },
+  { id: 1, date: '20/06/2025', time: '14h30', type: 'Consulta',   clinic: 'Clínica VetCare' },
+  { id: 2, date: '15/07/2025', time: '10h00', type: 'Vacina V10', clinic: 'Pet Saúde Plus'  },
+];
+
+const VACCINES = [
+  { name: 'Antirrábica',      date: '22/03/2025', next: '22/03/2026', status: 'ok'      },
+  { name: 'V10 (Polivalente)', date: '10/10/2024', next: '10/10/2025', status: 'alert'   },
+  { name: 'Gripe Canina',     date: '05/06/2024', next: '05/06/2025', status: 'expired' },
 ];
 
 const STATUS_COLOR = { ok: '#2e7d32', alert: '#f57c00', expired: '#c62828' };
+const STATUS_BG    = { ok: '#e8f5e9', alert: '#fff3e0', expired: '#ffebee' };
+const STATUS_LABEL = { ok: 'Em dia',  alert: 'Atenção', expired: 'Vencida' };
 
 const MONTHS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
@@ -50,9 +58,9 @@ export default function MeuPetScreen({ navigate, user }) {
 
   const petEmoji =
     pet.species === 'Cachorro' ? '🐶'
-    : pet.species === 'Gato' ? '🐱'
+    : pet.species === 'Gato'    ? '🐱'
     : pet.species === 'Pássaro' ? '🐦'
-    : pet.species === 'Coelho' ? '🐰'
+    : pet.species === 'Coelho'  ? '🐰'
     : '🐾';
 
   function handleSave() {
@@ -270,10 +278,41 @@ export default function MeuPetScreen({ navigate, user }) {
           </View>
         )}
 
-        {/* ── Aba: Vacinas (placeholder) ── */}
+        {/* ── Aba: Vacinas ── */}
         {activeTab === 'vacinas' && (
           <View style={styles.section}>
+
             <Text style={styles.sectionTitle}>Carteira de vacinação</Text>
+            {VACCINES.map((v, i) => (
+              <View key={i} style={styles.vaccineCard}>
+                <View style={styles.vaccineLeft}>
+                  <Text style={styles.vaccineName}>{v.name}</Text>
+                  <Text style={styles.vaccineDate}>Aplicada em {v.date}</Text>
+                  <Text style={styles.vaccineNext}>Próxima: {v.next}</Text>
+                </View>
+                <View style={[styles.vaccineStatusBadge, { backgroundColor: STATUS_BG[v.status] }]}>
+                  <Text style={[styles.vaccineStatusText, { color: STATUS_COLOR[v.status] }]}>
+                    {STATUS_LABEL[v.status]}
+                  </Text>
+                </View>
+              </View>
+            ))}
+
+            <View style={styles.vaccineTip}>
+              <Text style={styles.vaccineTipIcon}>💡</Text>
+              <Text style={styles.vaccineTipText}>
+                Vacinas vencidas ou com atenção precisam de atualização. Agende uma consulta pelo app.
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.scheduleBtn}
+              onPress={() => navigate('Home')}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.scheduleBtnText}>Agendar consulta</Text>
+            </TouchableOpacity>
+
           </View>
         )}
 
@@ -615,6 +654,82 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e7d32',
     fontWeight: '600',
+  },
+
+  vaccineCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  vaccineLeft: {
+    flex: 1,
+    marginRight: 12,
+  },
+  vaccineName: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#1a1a1a',
+    marginBottom: 4,
+  },
+  vaccineDate: {
+    fontSize: 12,
+    color: '#888',
+    marginBottom: 2,
+  },
+  vaccineNext: {
+    fontSize: 12,
+    color: '#555',
+  },
+  vaccineStatusBadge: {
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+  },
+  vaccineStatusText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  vaccineTip: {
+    backgroundColor: '#fff8e1',
+    borderRadius: 12,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginTop: 4,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: '#ffe082',
+  },
+  vaccineTipIcon: {
+    fontSize: 16,
+    marginRight: 10,
+    marginTop: 1,
+  },
+  vaccineTipText: {
+    flex: 1,
+    fontSize: 12,
+    color: '#5d4037',
+    lineHeight: 18,
+  },
+  scheduleBtn: {
+    backgroundColor: '#2e7d32',
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  scheduleBtnText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '700',
   },
 
 });
