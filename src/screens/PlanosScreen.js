@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { COLORS, SHADOW } from '../theme';
 
 const PLANS = [
   {
@@ -9,12 +10,12 @@ const PLANS = [
     highlight: false,
     badge: null,
     description: 'Para quem está começando a cuidar do pet',
-    color: '#f7f7f7',
+    color: COLORS.background,
     borderColor: '#e0e0e0',
-    textColor: '#1a1a1a',
-    subtextColor: '#888',
-    btnBg: '#2e7d32',
-    btnText: '#fff',
+    textColor: COLORS.text,
+    subtextColor: COLORS.textFaint,
+    btnBg: COLORS.primary,
+    btnText: COLORS.textWhite,
     benefits: [
       '1 consulta veterinária/mês',
       'Desconto 10% no Marketplace',
@@ -34,12 +35,12 @@ const PLANS = [
     highlight: true,
     badge: 'Mais popular',
     description: 'O equilíbrio perfeito entre custo e benefício',
-    color: '#2e7d32',
-    borderColor: '#2e7d32',
-    textColor: '#fff',
+    color: COLORS.primary,
+    borderColor: COLORS.primary,
+    textColor: COLORS.textWhite,
     subtextColor: 'rgba(255,255,255,0.75)',
-    btnBg: '#fff',
-    btnText: '#2e7d32',
+    btnBg: COLORS.textWhite,
+    btnText: COLORS.primary,
     benefits: [
       '3 consultas veterinárias/mês',
       'Desconto 20% no Marketplace',
@@ -57,12 +58,12 @@ const PLANS = [
     highlight: false,
     badge: null,
     description: 'Cuidado completo e sem limitações',
-    color: '#f7f7f7',
+    color: COLORS.background,
     borderColor: '#e0e0e0',
-    textColor: '#1a1a1a',
-    subtextColor: '#888',
-    btnBg: '#2e7d32',
-    btnText: '#fff',
+    textColor: COLORS.text,
+    subtextColor: COLORS.textFaint,
+    btnBg: COLORS.primary,
+    btnText: COLORS.textWhite,
     benefits: [
       'Consultas veterinárias ilimitadas',
       'Desconto 30% no Marketplace',
@@ -93,9 +94,9 @@ const FAQ = [
 
 export default function PlanosScreen({ navigate, user }) {
   const [currentPlan] = useState(null);
-  const [openFaq, setOpenFaq] = useState(null);
+  const [openFaq, setOpenFaq]   = useState(null);
 
-  const handleSubscribe = (plan) => {
+  function handleSubscribe(plan) {
     Alert.alert(
       `Contratar ${plan.name}`,
       `Assinar o plano ${plan.name} por R$ ${plan.price.toFixed(2).replace('.', ',')}/mês?`,
@@ -107,17 +108,20 @@ export default function PlanosScreen({ navigate, user }) {
         },
       ]
     );
-  };
+  }
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+
+      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Planos de Saúde</Text>
         <Text style={styles.headerSub}>Escolha o melhor cuidado para o seu pet</Text>
       </View>
 
+      {/* Banner de status */}
       {currentPlan ? (
-        <View style={styles.activePlanBanner}>
+        <View style={[styles.banner, styles.bannerActive]}>
           <View>
             <Text style={styles.activePlanLabel}>Plano ativo</Text>
             <Text style={styles.activePlanName}>{currentPlan}</Text>
@@ -127,17 +131,18 @@ export default function PlanosScreen({ navigate, user }) {
           </TouchableOpacity>
         </View>
       ) : (
-        <View style={styles.noPlanBanner}>
-          <Text style={styles.noPlanEmoji}>🐾</Text>
+        <View style={[styles.banner, styles.bannerEmpty]}>
+          <Text style={styles.bannerEmoji}>🐾</Text>
           <View style={{ flex: 1, marginLeft: 12 }}>
-            <Text style={styles.noPlanTitle}>Sem plano ativo</Text>
-            <Text style={styles.noPlanSub}>Escolha um plano abaixo e proteja seu pet</Text>
+            <Text style={styles.bannerEmptyTitle}>Sem plano ativo</Text>
+            <Text style={styles.bannerEmptySub}>Escolha um plano abaixo e proteja seu pet</Text>
           </View>
         </View>
       )}
 
+      {/* Cards de planos */}
       <View style={styles.plansSection}>
-        {PLANS.map((plan) => (
+        {PLANS.map(plan => (
           <View
             key={plan.id}
             style={[
@@ -157,26 +162,24 @@ export default function PlanosScreen({ navigate, user }) {
 
             <View style={styles.priceRow}>
               <Text style={[styles.priceCurrency, { color: plan.textColor }]}>R$</Text>
-              <Text style={[styles.priceValue, { color: plan.textColor }]}>
+              <Text style={[styles.priceValue,    { color: plan.textColor }]}>
                 {plan.price.toFixed(2).replace('.', ',')}
               </Text>
-              <Text style={[styles.pricePeriod, { color: plan.subtextColor }]}>/mês</Text>
+              <Text style={[styles.pricePeriod,   { color: plan.subtextColor }]}>/mês</Text>
             </View>
 
-            <View style={[styles.divider, { backgroundColor: plan.highlight ? 'rgba(255,255,255,0.2)' : '#eee' }]} />
+            <View style={[styles.divider, { backgroundColor: plan.highlight ? 'rgba(255,255,255,0.2)' : COLORS.borderLight }]} />
 
             {plan.benefits.map((b, i) => (
               <View key={i} style={styles.benefitRow}>
-                <Text style={[styles.benefitCheck, plan.highlight ? styles.benefitCheckLight : styles.benefitCheckGreen]}>
-                  ✓
-                </Text>
+                <Text style={[styles.benefitIcon, { color: plan.highlight ? 'rgba(255,255,255,0.9)' : COLORS.primary }]}>✓</Text>
                 <Text style={[styles.benefitText, { color: plan.textColor }]}>{b}</Text>
               </View>
             ))}
 
             {plan.missing.map((b, i) => (
               <View key={i} style={styles.benefitRow}>
-                <Text style={styles.benefitMissIcon}>✕</Text>
+                <Text style={[styles.benefitIcon, { color: '#bbb' }]}>✕</Text>
                 <Text style={[styles.benefitText, { color: plan.subtextColor }]}>{b}</Text>
               </View>
             ))}
@@ -186,14 +189,13 @@ export default function PlanosScreen({ navigate, user }) {
               onPress={() => handleSubscribe(plan)}
               activeOpacity={0.8}
             >
-              <Text style={[styles.planBtnText, { color: plan.btnText }]}>
-                Contratar {plan.name}
-              </Text>
+              <Text style={[styles.planBtnText, { color: plan.btnText }]}>Contratar {plan.name}</Text>
             </TouchableOpacity>
           </View>
         ))}
       </View>
 
+      {/* Garantia */}
       <View style={styles.guaranteeCard}>
         <Text style={styles.guaranteeEmoji}>🛡️</Text>
         <View style={{ flex: 1, marginLeft: 14 }}>
@@ -204,6 +206,7 @@ export default function PlanosScreen({ navigate, user }) {
         </View>
       </View>
 
+      {/* FAQ */}
       <View style={styles.faqSection}>
         <Text style={styles.faqTitle}>Dúvidas frequentes</Text>
         {FAQ.map((item, i) => (
@@ -230,80 +233,247 @@ export default function PlanosScreen({ navigate, user }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f7f7f7' },
+
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+
   header: {
-    paddingHorizontal: 20, paddingTop: 20, paddingBottom: 16,
-    backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#f0f0f0',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 16,
+    backgroundColor: COLORS.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
   },
-  headerTitle: { fontSize: 18, fontWeight: 'bold', color: '#1a1a1a' },
-  headerSub: { fontSize: 13, color: '#888', marginTop: 2 },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: COLORS.text,
+  },
+  headerSub: {
+    fontSize: 13,
+    color: COLORS.textFaint,
+    marginTop: 2,
+  },
 
-  activePlanBanner: {
-    margin: 16, backgroundColor: '#e8f5e9', borderRadius: 12, padding: 16,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    borderWidth: 1, borderColor: '#c8e6c9',
+  banner: {
+    margin: 16,
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
   },
-  activePlanLabel: { fontSize: 11, color: '#2e7d32', fontWeight: '600', textTransform: 'uppercase', marginBottom: 2 },
-  activePlanName: { fontSize: 16, fontWeight: '700', color: '#1a1a1a' },
-  managePlanBtn: { backgroundColor: '#2e7d32', borderRadius: 8, paddingVertical: 8, paddingHorizontal: 14 },
-  managePlanText: { color: '#fff', fontSize: 13, fontWeight: '600' },
-  noPlanBanner: {
-    margin: 16, backgroundColor: '#fff', borderRadius: 12, padding: 16,
-    flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#eee',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 3, elevation: 1,
+  bannerActive: {
+    backgroundColor: COLORS.primaryLight,
+    borderColor: COLORS.primaryBorder,
+    justifyContent: 'space-between',
   },
-  noPlanEmoji: { fontSize: 28 },
-  noPlanTitle: { fontSize: 14, fontWeight: '700', color: '#1a1a1a', marginBottom: 2 },
-  noPlanSub: { fontSize: 12, color: '#888' },
+  bannerEmpty: {
+    backgroundColor: COLORS.surface,
+    borderColor: COLORS.borderLight,
+    ...SHADOW.sm,
+  },
+  activePlanLabel: {
+    fontSize: 11,
+    color: COLORS.primary,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    marginBottom: 2,
+  },
+  activePlanName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  managePlanBtn: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+  },
+  managePlanText: {
+    color: COLORS.textWhite,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  bannerEmoji: {
+    fontSize: 28,
+  },
+  bannerEmptyTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: COLORS.text,
+    marginBottom: 2,
+  },
+  bannerEmptySub: {
+    fontSize: 12,
+    color: COLORS.textFaint,
+  },
 
-  plansSection: { paddingHorizontal: 16, gap: 14 },
+  plansSection: {
+    paddingHorizontal: 16,
+    gap: 14,
+  },
   planCard: {
-    borderRadius: 16, padding: 20, borderWidth: 1.5,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06, shadowRadius: 6, elevation: 2, position: 'relative',
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1.5,
+    position: 'relative',
+    ...SHADOW.md,
   },
-  planCardHighlight: { shadowOpacity: 0.15, shadowRadius: 10, elevation: 5 },
+  planCardHighlight: {
+    ...SHADOW.lg,
+  },
   badge: {
-    position: 'absolute', top: -11, alignSelf: 'center',
-    backgroundColor: '#ff8f00', borderRadius: 20, paddingHorizontal: 14, paddingVertical: 4,
+    position: 'absolute',
+    top: -11,
+    alignSelf: 'center',
+    backgroundColor: COLORS.accent,
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 4,
   },
-  badgeText: { fontSize: 11, fontWeight: '700', color: '#fff', textTransform: 'uppercase', letterSpacing: 0.5 },
-  planName: { fontSize: 20, fontWeight: '800', marginBottom: 4, marginTop: 6 },
-  planDesc: { fontSize: 13, marginBottom: 14, lineHeight: 18 },
-  priceRow: { flexDirection: 'row', alignItems: 'flex-end', marginBottom: 16, gap: 2 },
-  priceCurrency: { fontSize: 16, fontWeight: '600', marginBottom: 4 },
-  priceValue: { fontSize: 34, fontWeight: '800', lineHeight: 38 },
-  pricePeriod: { fontSize: 14, marginBottom: 6, marginLeft: 2 },
-  divider: { height: 1, marginBottom: 14 },
-  benefitRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8, gap: 10 },
-  benefitCheck: { fontSize: 13, fontWeight: '700', width: 18 },
-  benefitCheckGreen: { color: '#2e7d32' },
-  benefitCheckLight: { color: 'rgba(255,255,255,0.9)' },
-  benefitMissIcon: { fontSize: 12, color: '#bbb', width: 18 },
-  benefitText: { fontSize: 13, lineHeight: 18, flex: 1 },
-  planBtn: { borderRadius: 10, paddingVertical: 13, alignItems: 'center', marginTop: 16 },
-  planBtnText: { fontSize: 14, fontWeight: '700' },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: COLORS.textWhite,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  planName: {
+    fontSize: 20,
+    fontWeight: '800',
+    marginBottom: 4,
+    marginTop: 6,
+  },
+  planDesc: {
+    fontSize: 13,
+    marginBottom: 14,
+    lineHeight: 18,
+  },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginBottom: 16,
+    gap: 2,
+  },
+  priceCurrency: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  priceValue: {
+    fontSize: 34,
+    fontWeight: '800',
+    lineHeight: 38,
+  },
+  pricePeriod: {
+    fontSize: 14,
+    marginBottom: 6,
+    marginLeft: 2,
+  },
+  divider: {
+    height: 1,
+    marginBottom: 14,
+  },
+  benefitRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    gap: 10,
+  },
+  benefitIcon: {
+    fontSize: 13,
+    fontWeight: '700',
+    width: 18,
+  },
+  benefitText: {
+    fontSize: 13,
+    lineHeight: 18,
+    flex: 1,
+  },
+  planBtn: {
+    borderRadius: 10,
+    paddingVertical: 13,
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  planBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
 
   guaranteeCard: {
-    margin: 16, backgroundColor: '#fff', borderRadius: 12, padding: 16,
-    flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#eee',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 3, elevation: 1,
+    margin: 16,
+    backgroundColor: COLORS.surface,
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    ...SHADOW.sm,
   },
-  guaranteeEmoji: { fontSize: 30 },
-  guaranteeTitle: { fontSize: 14, fontWeight: '700', color: '#1a1a1a', marginBottom: 4 },
-  guaranteeSub: { fontSize: 12, color: '#666', lineHeight: 17 },
+  guaranteeEmoji: {
+    fontSize: 30,
+  },
+  guaranteeTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: COLORS.text,
+    marginBottom: 4,
+  },
+  guaranteeSub: {
+    fontSize: 12,
+    color: COLORS.textMuted,
+    lineHeight: 17,
+  },
 
-  faqSection: { paddingHorizontal: 16 },
-  faqTitle: { fontSize: 16, fontWeight: '700', color: '#1a1a1a', marginBottom: 12 },
+  faqSection: {
+    paddingHorizontal: 16,
+  },
+  faqTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.text,
+    marginBottom: 12,
+  },
   faqItem: {
-    backgroundColor: '#fff', borderRadius: 12, padding: 16, marginBottom: 8,
-    borderWidth: 1, borderColor: '#eee',
+    backgroundColor: COLORS.surface,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
   },
-  faqHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  faqQuestion: { fontSize: 13, fontWeight: '600', color: '#1a1a1a', flex: 1, paddingRight: 8, lineHeight: 18 },
-  faqChevron: { fontSize: 10, color: '#999' },
+  faqHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  faqQuestion: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.text,
+    flex: 1,
+    paddingRight: 8,
+    lineHeight: 18,
+  },
+  faqChevron: {
+    fontSize: 10,
+    color: COLORS.textDisabled,
+  },
   faqAnswer: {
-    fontSize: 13, color: '#666', lineHeight: 19, marginTop: 10,
-    paddingTop: 10, borderTopWidth: 1, borderTopColor: '#f0f0f0',
+    fontSize: 13,
+    color: COLORS.textMuted,
+    lineHeight: 19,
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.border,
   },
+
 });
