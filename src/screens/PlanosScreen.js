@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { COLORS, SHADOW } from '../theme';
 
+// ── Dados mockados ────────────────────────────────────────
+
 const PLANS = [
   {
     id: 1,
@@ -100,6 +102,8 @@ const FAQ = [
     a: 'Nossa rede de clínicas parceiras atende emergências 24h. Basta apresentar seu número de assinante na recepção.',
   },
 ];
+
+// ── Componente ────────────────────────────────────────────
 
 export default function PlanosScreen({ navigate, user }) {
   const [currentPlan] = useState(null);
@@ -243,6 +247,8 @@ export default function PlanosScreen({ navigate, user }) {
   );
 }
 
+// ── Estilos ───────────────────────────────────────────────
+
 const styles = StyleSheet.create({
 
   container: {
@@ -250,6 +256,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
 
+  // ── Header ──────────────────────────────────────────────
   header: {
     paddingHorizontal: 20,
     paddingTop: 20,
@@ -269,6 +276,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
+  // ── Banners (base compartilhada) ─────────────────────────
   banner: {
     margin: 16,
     borderRadius: 12,
@@ -328,6 +336,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  // ── Cards de planos ──────────────────────────────────────
   plansSection: {
     paddingHorizontal: 16,
     gap: 14,
@@ -416,6 +425,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
+  // ── Garantia ─────────────────────────────────────────────
   guaranteeCard: {
     margin: 16,
     backgroundColor: COLORS.surface,
@@ -442,6 +452,7 @@ const styles = StyleSheet.create({
     lineHeight: 17,
   },
 
+  // ── FAQ ──────────────────────────────────────────────────
   faqSection: {
     paddingHorizontal: 16,
   },
