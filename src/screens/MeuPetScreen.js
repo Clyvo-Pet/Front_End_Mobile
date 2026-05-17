@@ -26,6 +26,22 @@ const TABS = [
 
 const SPECIES_LIST = ['Cachorro', 'Gato', 'Pássaro', 'Coelho', 'Outro'];
 
+const HEALTH_HISTORY = [
+  { id: 1, date: '08/05/2025', type: 'Consulta',  desc: 'Check-up anual — Tudo ok!',                   status: 'ok'    },
+  { id: 2, date: '22/03/2025', type: 'Vacina',    desc: 'Antirrábica — dose anual aplicada',            status: 'ok'    },
+  { id: 3, date: '10/02/2025', type: 'Exame',     desc: 'Hemograma completo — resultados normais',      status: 'ok'    },
+  { id: 4, date: '05/01/2025', type: 'Consulta',  desc: 'Coceira na pele — tratamento prescrito',       status: 'alert' },
+];
+
+const NEXT_APPOINTMENTS = [
+  { id: 1, date: '20/06/2025', time: '14h30', type: 'Consulta',   clinic: 'Clínica VetCare'  },
+  { id: 2, date: '15/07/2025', time: '10h00', type: 'Vacina V10', clinic: 'Pet Saúde Plus'   },
+];
+
+const STATUS_COLOR = { ok: '#2e7d32', alert: '#f57c00', expired: '#c62828' };
+
+const MONTHS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
 export default function MeuPetScreen({ navigate, user }) {
   const [pet,       setPet]       = useState({ ...DEFAULT_PET });
   const [draft,     setDraft]     = useState({ ...DEFAULT_PET });
@@ -110,7 +126,6 @@ export default function MeuPetScreen({ navigate, user }) {
         {/* ── Aba: Informações ── */}
         {activeTab === 'info' && (
           <View style={styles.section}>
-
             {editing ? (
               <>
                 <Text style={styles.sectionTitle}>Editar dados</Text>
@@ -188,13 +203,13 @@ export default function MeuPetScreen({ navigate, user }) {
               <>
                 <Text style={styles.sectionTitle}>Dados do pet</Text>
                 {[
-                  { label: 'Nome',        value: pet.name    },
-                  { label: 'Espécie',     value: pet.species },
-                  { label: 'Raça',        value: pet.breed   },
-                  { label: 'Idade',       value: pet.age     },
-                  { label: 'Peso',        value: pet.weight  },
-                  { label: 'Cor / Pelagem', value: pet.color },
-                  { label: 'Tutor',       value: user?.name || 'Tutor' },
+                  { label: 'Nome',          value: pet.name    },
+                  { label: 'Espécie',       value: pet.species },
+                  { label: 'Raça',          value: pet.breed   },
+                  { label: 'Idade',         value: pet.age     },
+                  { label: 'Peso',          value: pet.weight  },
+                  { label: 'Cor / Pelagem', value: pet.color   },
+                  { label: 'Tutor',         value: user?.name || 'Tutor' },
                 ].map(field => (
                   <View key={field.label} style={styles.infoRow}>
                     <Text style={styles.infoLabel}>{field.label}</Text>
@@ -203,14 +218,55 @@ export default function MeuPetScreen({ navigate, user }) {
                 ))}
               </>
             )}
-
           </View>
         )}
 
-        {/* ── Aba: Saúde (placeholder) ── */}
+        {/* ── Aba: Saúde ── */}
         {activeTab === 'saude' && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Histórico de saúde</Text>
+
+            <Text style={styles.sectionTitle}>Próximas consultas</Text>
+            {NEXT_APPOINTMENTS.map(appt => {
+              const parts = appt.date.split('/');
+              const day   = parts[0];
+              const month = MONTHS[parseInt(parts[1]) - 1];
+              return (
+                <View key={appt.id} style={styles.apptCard}>
+                  <View style={styles.apptDateBox}>
+                    <Text style={styles.apptDay}>{day}</Text>
+                    <Text style={styles.apptMonth}>{month}</Text>
+                  </View>
+                  <View style={styles.apptInfo}>
+                    <Text style={styles.apptType}>{appt.type}</Text>
+                    <Text style={styles.apptClinic}>{appt.clinic}</Text>
+                    <Text style={styles.apptTime}>⏰ {appt.time}</Text>
+                  </View>
+                </View>
+              );
+            })}
+
+            <Text style={[styles.sectionTitle, { marginTop: 20 }]}>Histórico</Text>
+            {HEALTH_HISTORY.map(item => (
+              <View key={item.id} style={styles.historyItem}>
+                <View style={[styles.historyAccent, { backgroundColor: STATUS_COLOR[item.status] }]} />
+                <View style={styles.historyContent}>
+                  <View style={styles.historyHeader}>
+                    <Text style={styles.historyType}>{item.type}</Text>
+                    <Text style={styles.historyDate}>{item.date}</Text>
+                  </View>
+                  <Text style={styles.historyDesc}>{item.desc}</Text>
+                </View>
+              </View>
+            ))}
+
+            <TouchableOpacity
+              style={styles.addRecordBtn}
+              onPress={() => Alert.alert('Em breve', 'Funcionalidade em desenvolvimento.')}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.addRecordText}>+ Adicionar registro</Text>
+            </TouchableOpacity>
+
           </View>
         )}
 
@@ -453,6 +509,112 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#fff',
     fontWeight: '700',
+  },
+
+  apptCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  apptDateBox: {
+    width: 46,
+    height: 52,
+    backgroundColor: '#e8f5e9',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 14,
+  },
+  apptDay: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#2e7d32',
+    lineHeight: 24,
+  },
+  apptMonth: {
+    fontSize: 10,
+    color: '#2e7d32',
+    fontWeight: '600',
+    textTransform: 'uppercase',
+  },
+  apptInfo: {
+    flex: 1,
+  },
+  apptType: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#1a1a1a',
+    marginBottom: 2,
+  },
+  apptClinic: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 4,
+  },
+  apptTime: {
+    fontSize: 12,
+    color: '#888',
+  },
+
+  historyItem: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    marginBottom: 10,
+    flexDirection: 'row',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  historyAccent: {
+    width: 4,
+  },
+  historyContent: {
+    flex: 1,
+    padding: 14,
+  },
+  historyHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  historyType: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#1a1a1a',
+  },
+  historyDate: {
+    fontSize: 12,
+    color: '#999',
+  },
+  historyDesc: {
+    fontSize: 13,
+    color: '#555',
+    lineHeight: 18,
+  },
+  addRecordBtn: {
+    borderWidth: 1.5,
+    borderColor: '#2e7d32',
+    borderStyle: 'dashed',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  addRecordText: {
+    fontSize: 14,
+    color: '#2e7d32',
+    fontWeight: '600',
   },
 
 });
