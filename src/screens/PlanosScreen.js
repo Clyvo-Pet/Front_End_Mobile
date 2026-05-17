@@ -16,6 +16,9 @@ const PLANS = [
     subtextColor: COLORS.textFaint,
     btnBg: COLORS.primary,
     btnText: COLORS.textWhite,
+    dividerColor: COLORS.borderLight,
+    iconColor: COLORS.primary,
+    iconMissColor: '#bbb',
     benefits: [
       '1 consulta veterinária/mês',
       'Desconto 10% no Marketplace',
@@ -41,6 +44,9 @@ const PLANS = [
     subtextColor: 'rgba(255,255,255,0.75)',
     btnBg: COLORS.textWhite,
     btnText: COLORS.primary,
+    dividerColor: 'rgba(255,255,255,0.2)',
+    iconColor: 'rgba(255,255,255,0.9)',
+    iconMissColor: 'rgba(255,255,255,0.35)',
     benefits: [
       '3 consultas veterinárias/mês',
       'Desconto 20% no Marketplace',
@@ -64,6 +70,9 @@ const PLANS = [
     subtextColor: COLORS.textFaint,
     btnBg: COLORS.primary,
     btnText: COLORS.textWhite,
+    dividerColor: COLORS.borderLight,
+    iconColor: COLORS.primary,
+    iconMissColor: '#bbb',
     benefits: [
       'Consultas veterinárias ilimitadas',
       'Desconto 30% no Marketplace',
@@ -94,7 +103,7 @@ const FAQ = [
 
 export default function PlanosScreen({ navigate, user }) {
   const [currentPlan] = useState(null);
-  const [openFaq, setOpenFaq]   = useState(null);
+  const [openFaq, setOpenFaq] = useState(null);
 
   function handleSubscribe(plan) {
     Alert.alert(
@@ -133,7 +142,7 @@ export default function PlanosScreen({ navigate, user }) {
       ) : (
         <View style={[styles.banner, styles.bannerEmpty]}>
           <Text style={styles.bannerEmoji}>🐾</Text>
-          <View style={{ flex: 1, marginLeft: 12 }}>
+          <View style={styles.bannerBody}>
             <Text style={styles.bannerEmptyTitle}>Sem plano ativo</Text>
             <Text style={styles.bannerEmptySub}>Escolha um plano abaixo e proteja seu pet</Text>
           </View>
@@ -147,8 +156,8 @@ export default function PlanosScreen({ navigate, user }) {
             key={plan.id}
             style={[
               styles.planCard,
+              plan.highlight ? SHADOW.lg : SHADOW.md,
               { backgroundColor: plan.color, borderColor: plan.borderColor },
-              plan.highlight && styles.planCardHighlight,
             ]}
           >
             {plan.badge && (
@@ -168,18 +177,18 @@ export default function PlanosScreen({ navigate, user }) {
               <Text style={[styles.pricePeriod,   { color: plan.subtextColor }]}>/mês</Text>
             </View>
 
-            <View style={[styles.divider, { backgroundColor: plan.highlight ? 'rgba(255,255,255,0.2)' : COLORS.borderLight }]} />
+            <View style={[styles.divider, { backgroundColor: plan.dividerColor }]} />
 
             {plan.benefits.map((b, i) => (
               <View key={i} style={styles.benefitRow}>
-                <Text style={[styles.benefitIcon, { color: plan.highlight ? 'rgba(255,255,255,0.9)' : COLORS.primary }]}>✓</Text>
+                <Text style={[styles.benefitIcon, { color: plan.iconColor }]}>✓</Text>
                 <Text style={[styles.benefitText, { color: plan.textColor }]}>{b}</Text>
               </View>
             ))}
 
             {plan.missing.map((b, i) => (
               <View key={i} style={styles.benefitRow}>
-                <Text style={[styles.benefitIcon, { color: '#bbb' }]}>✕</Text>
+                <Text style={[styles.benefitIcon, { color: plan.iconMissColor }]}>✕</Text>
                 <Text style={[styles.benefitText, { color: plan.subtextColor }]}>{b}</Text>
               </View>
             ))}
@@ -189,7 +198,9 @@ export default function PlanosScreen({ navigate, user }) {
               onPress={() => handleSubscribe(plan)}
               activeOpacity={0.8}
             >
-              <Text style={[styles.planBtnText, { color: plan.btnText }]}>Contratar {plan.name}</Text>
+              <Text style={[styles.planBtnText, { color: plan.btnText }]}>
+                Contratar {plan.name}
+              </Text>
             </TouchableOpacity>
           </View>
         ))}
@@ -198,7 +209,7 @@ export default function PlanosScreen({ navigate, user }) {
       {/* Garantia */}
       <View style={styles.guaranteeCard}>
         <Text style={styles.guaranteeEmoji}>🛡️</Text>
-        <View style={{ flex: 1, marginLeft: 14 }}>
+        <View style={styles.bannerBody}>
           <Text style={styles.guaranteeTitle}>Garantia de 7 dias</Text>
           <Text style={styles.guaranteeSub}>
             Não ficou satisfeito? Cancelamos e devolvemos 100% do valor.
@@ -276,6 +287,23 @@ const styles = StyleSheet.create({
     borderColor: COLORS.borderLight,
     ...SHADOW.sm,
   },
+  bannerBody: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  bannerEmoji: {
+    fontSize: 28,
+  },
+  bannerEmptyTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: COLORS.text,
+    marginBottom: 2,
+  },
+  bannerEmptySub: {
+    fontSize: 12,
+    color: COLORS.textFaint,
+  },
   activePlanLabel: {
     fontSize: 11,
     color: COLORS.primary,
@@ -299,19 +327,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
   },
-  bannerEmoji: {
-    fontSize: 28,
-  },
-  bannerEmptyTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.text,
-    marginBottom: 2,
-  },
-  bannerEmptySub: {
-    fontSize: 12,
-    color: COLORS.textFaint,
-  },
 
   plansSection: {
     paddingHorizontal: 16,
@@ -321,11 +336,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     borderWidth: 1.5,
-    position: 'relative',
-    ...SHADOW.md,
-  },
-  planCardHighlight: {
-    ...SHADOW.lg,
   },
   badge: {
     position: 'absolute',
