@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
+import { COLORS, SHADOW } from '../theme';
 
 // ── Dados mockados ────────────────────────────────────────
 
@@ -29,10 +30,10 @@ const TABS = [
 const SPECIES_LIST = ['Cachorro', 'Gato', 'Pássaro', 'Coelho', 'Outro'];
 
 const HEALTH_HISTORY = [
-  { id: 1, date: '08/05/2025', type: 'Consulta', desc: 'Check-up anual — Tudo ok!',              status: 'ok'    },
-  { id: 2, date: '22/03/2025', type: 'Vacina',   desc: 'Antirrábica — dose anual aplicada',      status: 'ok'    },
-  { id: 3, date: '10/02/2025', type: 'Exame',    desc: 'Hemograma completo — resultados normais', status: 'ok'    },
-  { id: 4, date: '05/01/2025', type: 'Consulta', desc: 'Coceira na pele — tratamento prescrito',  status: 'alert' },
+  { id: 1, date: '08/05/2025', type: 'Consulta', desc: 'Check-up anual — Tudo ok!',               status: 'ok'    },
+  { id: 2, date: '22/03/2025', type: 'Vacina',   desc: 'Antirrábica — dose anual aplicada',       status: 'ok'    },
+  { id: 3, date: '10/02/2025', type: 'Exame',    desc: 'Hemograma completo — resultados normais',  status: 'ok'    },
+  { id: 4, date: '05/01/2025', type: 'Consulta', desc: 'Coceira na pele — tratamento prescrito',   status: 'alert' },
 ];
 
 const NEXT_APPOINTMENTS = [
@@ -41,14 +42,14 @@ const NEXT_APPOINTMENTS = [
 ];
 
 const VACCINES = [
-  { name: 'Antirrábica',      date: '22/03/2025', next: '22/03/2026', status: 'ok'      },
+  { name: 'Antirrábica',       date: '22/03/2025', next: '22/03/2026', status: 'ok'      },
   { name: 'V10 (Polivalente)', date: '10/10/2024', next: '10/10/2025', status: 'alert'   },
-  { name: 'Gripe Canina',     date: '05/06/2024', next: '05/06/2025', status: 'expired' },
+  { name: 'Gripe Canina',      date: '05/06/2024', next: '05/06/2025', status: 'expired' },
 ];
 
-const STATUS_COLOR = { ok: '#2e7d32', alert: '#f57c00', expired: '#c62828' };
-const STATUS_BG    = { ok: '#e8f5e9', alert: '#fff3e0', expired: '#ffebee' };
-const STATUS_LABEL = { ok: 'Em dia',  alert: 'Atenção', expired: 'Vencida' };
+const STATUS_COLOR = { ok: COLORS.primary,  alert: COLORS.warning,      expired: COLORS.danger      };
+const STATUS_BG    = { ok: COLORS.primaryLight, alert: COLORS.warningLight, expired: '#ffebee'       };
+const STATUS_LABEL = { ok: 'Em dia',        alert: 'Atenção',           expired: 'Vencida'          };
 
 const MONTHS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
 
   root: {
     flex: 1,
-    backgroundColor: '#f7f7f7',
+    backgroundColor: COLORS.background,
   },
 
   // ── Header ──────────────────────────────────────────────
@@ -344,51 +345,47 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 16,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: COLORS.border,
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: COLORS.text,
   },
   editBtn: {
     paddingHorizontal: 14,
     paddingVertical: 7,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#2e7d32',
+    borderColor: COLORS.primary,
   },
   editBtnText: {
     fontSize: 13,
-    color: '#2e7d32',
+    color: COLORS.primary,
     fontWeight: '600',
   },
 
   // ── Perfil ───────────────────────────────────────────────
   profileCard: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     margin: 16,
     borderRadius: 14,
     padding: 18,
     flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    ...SHADOW.md,
   },
   avatar: {
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: '#f0f7f0',
+    backgroundColor: COLORS.primaryBg,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: '#c8e6c9',
+    borderColor: COLORS.primaryBorder,
   },
   avatarEmoji: {
     fontSize: 38,
@@ -400,12 +397,12 @@ const styles = StyleSheet.create({
   petName: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: COLORS.text,
     marginBottom: 2,
   },
   petBreed: {
     fontSize: 13,
-    color: '#666',
+    color: COLORS.textMuted,
     marginBottom: 8,
   },
   petTagRow: {
@@ -414,23 +411,23 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   petTag: {
-    backgroundColor: '#e8f5e9',
+    backgroundColor: COLORS.primaryLight,
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 3,
   },
   petTagText: {
     fontSize: 11,
-    color: '#2e7d32',
+    color: COLORS.primary,
     fontWeight: '600',
   },
 
   // ── Abas ─────────────────────────────────────────────────
   tabRow: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: COLORS.border,
     paddingHorizontal: 16,
   },
   tab: {
@@ -441,15 +438,15 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   tabActive: {
-    borderBottomColor: '#2e7d32',
+    borderBottomColor: COLORS.primary,
   },
   tabText: {
     fontSize: 13,
-    color: '#999',
+    color: COLORS.textDisabled,
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#2e7d32',
+    color: COLORS.primary,
     fontWeight: '700',
   },
 
@@ -460,7 +457,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: COLORS.text,
     marginBottom: 12,
   },
 
@@ -471,16 +468,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 11,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: COLORS.border,
   },
   infoLabel: {
     fontSize: 13,
-    color: '#888',
+    color: COLORS.textFaint,
     fontWeight: '500',
   },
   infoValue: {
     fontSize: 13,
-    color: '#1a1a1a',
+    color: COLORS.text,
     fontWeight: '600',
     textAlign: 'right',
   },
@@ -488,21 +485,21 @@ const styles = StyleSheet.create({
   // ── Informações (modo edição) ────────────────────────────
   fieldLabel: {
     fontSize: 12,
-    color: '#888',
+    color: COLORS.textFaint,
     fontWeight: '600',
     textTransform: 'uppercase',
     marginTop: 14,
     marginBottom: 4,
   },
   fieldInput: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 13,
     fontSize: 14,
-    color: '#1a1a1a',
+    color: COLORS.text,
     borderWidth: 1,
-    borderColor: '#eaeaea',
+    borderColor: COLORS.borderInput,
   },
   speciesRow: {
     flexDirection: 'row',
@@ -519,16 +516,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafafa',
   },
   speciesChipActive: {
-    backgroundColor: '#2e7d32',
-    borderColor: '#2e7d32',
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   speciesChipText: {
     fontSize: 13,
-    color: '#666',
+    color: COLORS.textMuted,
     fontWeight: '500',
   },
   speciesChipTextActive: {
-    color: '#fff',
+    color: COLORS.textWhite,
     fontWeight: '600',
   },
   editActions: {
@@ -546,19 +543,19 @@ const styles = StyleSheet.create({
   },
   cancelBtnText: {
     fontSize: 14,
-    color: '#666',
+    color: COLORS.textMuted,
     fontWeight: '600',
   },
   saveBtn: {
     flex: 2,
-    backgroundColor: '#2e7d32',
+    backgroundColor: COLORS.primary,
     borderRadius: 10,
     paddingVertical: 13,
     alignItems: 'center',
   },
   saveBtnText: {
     fontSize: 14,
-    color: '#fff',
+    color: COLORS.textWhite,
     fontWeight: '700',
   },
 
@@ -566,20 +563,16 @@ const styles = StyleSheet.create({
   apptCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 3,
-    elevation: 1,
+    ...SHADOW.sm,
   },
   apptDateBox: {
     width: 46,
     height: 52,
-    backgroundColor: '#e8f5e9',
+    backgroundColor: COLORS.primaryLight,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -588,12 +581,12 @@ const styles = StyleSheet.create({
   apptDay: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#2e7d32',
+    color: COLORS.primary,
     lineHeight: 24,
   },
   apptMonth: {
     fontSize: 10,
-    color: '#2e7d32',
+    color: COLORS.primary,
     fontWeight: '600',
     textTransform: 'uppercase',
   },
@@ -603,31 +596,27 @@ const styles = StyleSheet.create({
   apptType: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: COLORS.text,
     marginBottom: 2,
   },
   apptClinic: {
     fontSize: 12,
-    color: '#666',
+    color: COLORS.textMuted,
     marginBottom: 4,
   },
   apptTime: {
     fontSize: 12,
-    color: '#888',
+    color: COLORS.textFaint,
   },
 
-  // ── Saúde: histórico ────────────────────────────────────
+  // ── Saúde: histórico ─────────────────────────────────────
   historyItem: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 12,
     marginBottom: 10,
     flexDirection: 'row',
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 3,
-    elevation: 1,
+    ...SHADOW.sm,
   },
   historyAccent: {
     width: 4,
@@ -644,20 +633,20 @@ const styles = StyleSheet.create({
   historyType: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: COLORS.text,
   },
   historyDate: {
     fontSize: 12,
-    color: '#999',
+    color: COLORS.textDisabled,
   },
   historyDesc: {
     fontSize: 13,
-    color: '#555',
+    color: COLORS.textMuted,
     lineHeight: 18,
   },
   addRecordBtn: {
     borderWidth: 1.5,
-    borderColor: '#2e7d32',
+    borderColor: COLORS.primary,
     borderStyle: 'dashed',
     borderRadius: 10,
     paddingVertical: 12,
@@ -666,24 +655,20 @@ const styles = StyleSheet.create({
   },
   addRecordText: {
     fontSize: 14,
-    color: '#2e7d32',
+    color: COLORS.primary,
     fontWeight: '600',
   },
 
   // ── Vacinas ──────────────────────────────────────────────
   vaccineCard: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.surface,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 3,
-    elevation: 1,
+    ...SHADOW.sm,
   },
   vaccineLeft: {
     flex: 1,
@@ -692,17 +677,17 @@ const styles = StyleSheet.create({
   vaccineName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: COLORS.text,
     marginBottom: 4,
   },
   vaccineDate: {
     fontSize: 12,
-    color: '#888',
+    color: COLORS.textFaint,
     marginBottom: 2,
   },
   vaccineNext: {
     fontSize: 12,
-    color: '#555',
+    color: COLORS.textMuted,
   },
   vaccineStatusBadge: {
     borderRadius: 20,
@@ -714,7 +699,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   vaccineTip: {
-    backgroundColor: '#fff8e1',
+    backgroundColor: COLORS.warningLight,
     borderRadius: 12,
     padding: 14,
     flexDirection: 'row',
@@ -722,7 +707,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#ffe082',
+    borderColor: COLORS.warningBorder,
   },
   vaccineTipIcon: {
     fontSize: 16,
@@ -732,17 +717,17 @@ const styles = StyleSheet.create({
   vaccineTipText: {
     flex: 1,
     fontSize: 12,
-    color: '#5d4037',
+    color: COLORS.warningText,
     lineHeight: 18,
   },
   scheduleBtn: {
-    backgroundColor: '#2e7d32',
+    backgroundColor: COLORS.primary,
     borderRadius: 10,
     paddingVertical: 14,
     alignItems: 'center',
   },
   scheduleBtnText: {
-    color: '#fff',
+    color: COLORS.textWhite,
     fontSize: 14,
     fontWeight: '700',
   },
