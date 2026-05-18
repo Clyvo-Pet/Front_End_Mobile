@@ -14,7 +14,7 @@ export const COLORS = {
   surface:        '#fff',
 
   border:         '#f0f0f0',
-  borderLight:    '#eee',
+  borderLight:    '#e0e0e0',
   borderInput:    '#eaeaea',
 
   danger:         '#c62828',
