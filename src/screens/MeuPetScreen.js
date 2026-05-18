@@ -187,7 +187,7 @@ export default function MeuPetScreen({ navigate, user }) {
                   value={draft.name}
                   onChangeText={t => setDraft({ ...draft, name: t })}
                   placeholder="Nome do pet"
-                  placeholderTextColor="#bbb"
+                  placeholderTextColor={COLORS.textDisabled}
                 />
 
                 <Text style={styles.fieldLabel}>Raça</Text>
@@ -196,7 +196,7 @@ export default function MeuPetScreen({ navigate, user }) {
                   value={draft.breed}
                   onChangeText={t => setDraft({ ...draft, breed: t })}
                   placeholder="Ex: Golden Retriever"
-                  placeholderTextColor="#bbb"
+                  placeholderTextColor={COLORS.textDisabled}
                 />
 
                 <Text style={styles.fieldLabel}>Idade</Text>
@@ -205,7 +205,7 @@ export default function MeuPetScreen({ navigate, user }) {
                   value={draft.age}
                   onChangeText={t => setDraft({ ...draft, age: t })}
                   placeholder="Ex: 3 anos"
-                  placeholderTextColor="#bbb"
+                  placeholderTextColor={COLORS.textDisabled}
                 />
 
                 <Text style={styles.fieldLabel}>Peso</Text>
@@ -214,7 +214,7 @@ export default function MeuPetScreen({ navigate, user }) {
                   value={draft.weight}
                   onChangeText={t => setDraft({ ...draft, weight: t })}
                   placeholder="Ex: 28 kg"
-                  placeholderTextColor="#bbb"
+                  placeholderTextColor={COLORS.textDisabled}
                 />
 
                 <Text style={styles.fieldLabel}>Cor / Pelagem</Text>
@@ -223,7 +223,7 @@ export default function MeuPetScreen({ navigate, user }) {
                   value={draft.color}
                   onChangeText={t => setDraft({ ...draft, color: t })}
                   placeholder="Ex: Dourado"
-                  placeholderTextColor="#bbb"
+                  placeholderTextColor={COLORS.textDisabled}
                 />
 
                 <Text style={styles.fieldLabel}>Espécie</Text>
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
   },
   editBtn: {
     paddingHorizontal: 14,
-    paddingVertical: 7,
+    paddingVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: COLORS.primary,
@@ -559,11 +559,11 @@ const styles = StyleSheet.create({
   },
   speciesChip: {
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: COLORS.borderLight,
     borderRadius: 20,
     paddingHorizontal: 14,
     paddingVertical: 6,
-    backgroundColor: '#fafafa',
+    backgroundColor: COLORS.surface,
   },
   speciesChipActive: {
     backgroundColor: COLORS.primary,
@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
   cancelBtn: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: COLORS.borderLight,
     borderRadius: 10,
     paddingVertical: 13,
     alignItems: 'center',
